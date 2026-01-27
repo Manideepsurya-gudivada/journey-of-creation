@@ -27,27 +27,44 @@ const GFGIcon = () => (
   </svg>
 );
 
+const NxtWaveIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+  </svg>
+);
+
 const codingPlatforms = [
   { 
     name: 'LeetCode', 
     icon: LeetCodeIcon, 
-    username: 'manideep_surya', // Update with your username
+    username: 'manideep_surya',
     url: 'https://leetcode.com/manideep_surya',
-    color: 'hover:text-[#FFA116]'
+    color: 'hover:text-[#FFA116]',
+    badge: null
   },
   { 
     name: 'CodeChef', 
     icon: CodeChefIcon, 
-    username: 'manideep_surya', // Update with your username
+    username: 'manideep_surya',
     url: 'https://www.codechef.com/users/manideep_surya',
-    color: 'hover:text-[#5B4638]'
+    color: 'hover:text-[#5B4638]',
+    badge: null
   },
   { 
     name: 'GeeksforGeeks', 
     icon: GFGIcon, 
-    username: 'manideep_surya', // Update with your username
+    username: 'manideep_surya',
     url: 'https://auth.geeksforgeeks.org/user/manideep_surya',
-    color: 'hover:text-[#2F8D46]'
+    color: 'hover:text-[#2F8D46]',
+    badge: null
+  },
+  { 
+    name: 'NxtWave', 
+    icon: NxtWaveIcon, 
+    username: 'manideep_surya',
+    url: 'https://www.ccbp.in/',
+    color: 'hover:text-[#1E88E5]',
+    badge: 'Currently Learning'
   },
 ];
 
@@ -155,8 +172,13 @@ const ProblemSolverDNA = () => {
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ delay: 0.7 + index * 0.1 }}
                     whileHover={{ scale: 1.05, y: -2 }}
-                    className={`group flex items-center gap-3 px-5 py-3 bg-secondary/50 border border-border/50 rounded-lg transition-all duration-300 hover:border-primary/50 hover:bg-secondary ${platform.color}`}
+                    className={`group relative flex items-center gap-3 px-5 py-3 bg-secondary/50 border border-border/50 rounded-lg transition-all duration-300 hover:border-primary/50 hover:bg-secondary ${platform.color}`}
                   >
+                    {platform.badge && (
+                      <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-mono rounded-full animate-pulse">
+                        {platform.badge}
+                      </span>
+                    )}
                     <Icon />
                     <div className="text-left">
                       <p className="font-medium text-foreground text-sm">{platform.name}</p>
