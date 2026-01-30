@@ -2,11 +2,18 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const floatingKeywords = [
-  { text: 'HTML', delay: 0, x: -120, y: -60, rotate: -15 },
-  { text: 'CSS', delay: 0.2, x: 150, y: -40, rotate: 10 },
-  { text: 'Logic', delay: 0.4, x: -80, y: 80, rotate: 5 },
-  { text: 'Java', delay: 0.6, x: 100, y: 60, rotate: -8 },
-  { text: 'Curiosity', delay: 0.8, x: 0, y: -100, rotate: 12 },
+  { text: 'HTML', delay: 0, x: -180, y: -80, rotate: -15 },
+  { text: 'CSS', delay: 0.2, x: 200, y: -50, rotate: 10 },
+  { text: 'Logic', delay: 0.4, x: -100, y: 100, rotate: 5 },
+  { text: 'Java', delay: 0.6, x: 160, y: 80, rotate: -8 },
+  { text: 'Curiosity', delay: 0.8, x: 50, y: -120, rotate: 12 },
+  { text: 'Python', delay: 0.3, x: -220, y: 20, rotate: -10 },
+  { text: 'Debug', delay: 0.5, x: 240, y: -100, rotate: 8 },
+  { text: 'Ideas', delay: 0.7, x: -150, y: -130, rotate: -5 },
+  { text: 'Build', delay: 0.9, x: 180, y: 120, rotate: 15 },
+  { text: 'Learn', delay: 1.0, x: -60, y: 140, rotate: -12 },
+  { text: 'Code', delay: 0.1, x: 280, y: 30, rotate: 6 },
+  { text: 'Create', delay: 0.55, x: -250, y: -40, rotate: 18 },
 ];
 
 const TheBeginning = () => {
