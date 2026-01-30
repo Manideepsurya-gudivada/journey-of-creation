@@ -2,18 +2,24 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const floatingKeywords = [
-  { text: 'HTML', delay: 0, x: -180, y: -80, rotate: -15 },
-  { text: 'CSS', delay: 0.2, x: 200, y: -50, rotate: 10 },
-  { text: 'Logic', delay: 0.4, x: -100, y: 100, rotate: 5 },
-  { text: 'Java', delay: 0.6, x: 160, y: 80, rotate: -8 },
-  { text: 'Curiosity', delay: 0.8, x: 50, y: -120, rotate: 12 },
-  { text: 'Python', delay: 0.3, x: -220, y: 20, rotate: -10 },
-  { text: 'Debug', delay: 0.5, x: 240, y: -100, rotate: 8 },
-  { text: 'Ideas', delay: 0.7, x: -150, y: -130, rotate: -5 },
-  { text: 'Build', delay: 0.9, x: 180, y: 120, rotate: 15 },
-  { text: 'Learn', delay: 1.0, x: -60, y: 140, rotate: -12 },
-  { text: 'Code', delay: 0.1, x: 280, y: 30, rotate: 6 },
-  { text: 'Create', delay: 0.55, x: -250, y: -40, rotate: 18 },
+  { text: 'HTML', delay: 0, x: -180, y: -80, rotate: -15, size: 'text-sm' },
+  { text: 'CSS', delay: 0.2, x: 200, y: -50, rotate: 10, size: 'text-base' },
+  { text: 'Logic', delay: 0.4, x: -100, y: 100, rotate: 5, size: 'text-sm' },
+  { text: 'Java', delay: 0.6, x: 160, y: 80, rotate: -8, size: 'text-base' },
+  { text: 'Curiosity', delay: 0.8, x: 50, y: -120, rotate: 12, size: 'text-lg' },
+  { text: 'Python', delay: 0.3, x: -220, y: 20, rotate: -10, size: 'text-sm' },
+  { text: 'Debug', delay: 0.5, x: 240, y: -100, rotate: 8, size: 'text-xs' },
+  { text: 'Ideas', delay: 0.7, x: -150, y: -130, rotate: -5, size: 'text-base' },
+  { text: 'Build', delay: 0.9, x: 180, y: 120, rotate: 15, size: 'text-sm' },
+  { text: 'Learn', delay: 1.0, x: -60, y: 140, rotate: -12, size: 'text-base' },
+  { text: 'Code', delay: 0.1, x: 280, y: 30, rotate: 6, size: 'text-lg' },
+  { text: 'Create', delay: 0.55, x: -250, y: -40, rotate: 18, size: 'text-sm' },
+  { text: 'React', delay: 0.35, x: -280, y: 80, rotate: -18, size: 'text-xs' },
+  { text: 'API', delay: 0.65, x: 260, y: 100, rotate: -6, size: 'text-sm' },
+  { text: 'Design', delay: 0.85, x: -40, y: -150, rotate: 8, size: 'text-xs' },
+  { text: 'Solve', delay: 0.45, x: 300, y: -30, rotate: -12, size: 'text-base' },
+  { text: 'Think', delay: 0.75, x: -300, y: -100, rotate: 5, size: 'text-sm' },
+  { text: 'Ship', delay: 0.95, x: 100, y: 150, rotate: -20, size: 'text-xs' },
 ];
 
 const TheBeginning = () => {
@@ -79,12 +85,7 @@ const TheBeginning = () => {
               repeat: Infinity,
               repeatDelay: 2,
             }}
-            className="absolute left-1/2 top-1/2 font-mono text-sm md:text-base text-primary/60 pointer-events-none"
-            style={{ 
-              '--drift-x': `${keyword.x}px`,
-              '--drift-y': `${keyword.y}px`,
-              '--drift-rotate': `${keyword.rotate}deg`,
-            } as React.CSSProperties}
+            className={`absolute left-1/2 top-1/2 font-mono ${keyword.size} md:text-base text-primary/60 pointer-events-none`}
           >
             {keyword.text}
           </motion.span>
