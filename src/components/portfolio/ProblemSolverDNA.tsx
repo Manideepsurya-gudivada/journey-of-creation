@@ -2,19 +2,6 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useInView, animate } from 'framer-motion';
 import { Bug, BookOpen, Cpu, ExternalLink } from 'lucide-react';
 
-const floatingElements = [
-  { text: 'DSA', x: -200, y: -120, delay: 0, rotate: -10 },
-  { text: 'OOP', x: 180, y: -80, delay: 0.3, rotate: 15 },
-  { text: 'Algorithms', x: -150, y: 100, delay: 0.5, rotate: -5 },
-  { text: 'Debug', x: 220, y: 60, delay: 0.7, rotate: 8 },
-  { text: 'Arrays', x: -80, y: -150, delay: 0.2, rotate: 12 },
-  { text: 'Trees', x: 280, y: -40, delay: 0.4, rotate: -8 },
-  { text: 'Graphs', x: -250, y: 40, delay: 0.6, rotate: 18 },
-  { text: 'DP', x: 150, y: 130, delay: 0.8, rotate: -15 },
-  { text: 'SQL', x: -300, y: -60, delay: 0.35, rotate: 5 },
-  { text: 'API', x: 300, y: 100, delay: 0.55, rotate: -12 },
-];
-
 const stats = [
   { icon: Bug, label: 'Bugs Fixed', value: 500, suffix: '+' },
   { icon: BookOpen, label: 'Concepts Learned', value: 150, suffix: '+' },
@@ -168,37 +155,9 @@ const ProblemSolverDNA = () => {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <section ref={ref} className="min-h-screen flex items-center justify-center px-6 py-32 relative overflow-hidden">
+    <section ref={ref} className="min-h-screen flex items-center justify-center px-6 py-32 relative">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
-
-      {/* Floating tech elements */}
-      {floatingElements.map((element) => (
-        <motion.span
-          key={element.text}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={
-            isInView
-              ? {
-                  opacity: [0, 0.4, 0.4, 0],
-                  scale: [0.5, 1, 1, 0.8],
-                  x: [0, element.x * 0.5, element.x],
-                  y: [0, element.y * 0.5, element.y],
-                  rotate: [0, element.rotate * 0.5, element.rotate],
-                }
-              : {}
-          }
-          transition={{
-            duration: 5,
-            delay: element.delay + 0.5,
-            repeat: Infinity,
-            repeatDelay: 3,
-          }}
-          className="absolute left-1/2 top-1/2 font-mono text-xs md:text-sm text-primary/40 pointer-events-none whitespace-nowrap"
-        >
-          {element.text}
-        </motion.span>
-      ))}
 
       <div className="max-w-5xl w-full relative z-10">
         <motion.div
