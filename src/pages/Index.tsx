@@ -3,10 +3,10 @@ import TheBeginning from '@/components/portfolio/TheBeginning';
 import HowIThink from '@/components/portfolio/HowIThink';
 import ProjectShowcase from '@/components/portfolio/ProjectShowcase';
 import SkillsSection from '@/components/portfolio/SkillsSection';
+import EducationSection from '@/components/portfolio/EducationSection';
 import GrowthTimeline from '@/components/portfolio/GrowthTimeline';
 import ContactSection from '@/components/portfolio/ContactSection';
 import CustomCursor from '@/components/portfolio/CustomCursor';
-
 const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -40,6 +40,7 @@ const Index = () => {
         <HowIThink />
         <ProjectShowcase />
         <SkillsSection />
+        <EducationSection />
         <GrowthTimeline />
         <ContactSection />
       </main>
