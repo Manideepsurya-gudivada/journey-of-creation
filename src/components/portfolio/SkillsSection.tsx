@@ -7,16 +7,12 @@ import {
   Globe, 
   Palette, 
   LayoutGrid, 
-  Binary, 
   GitBranch,
   Database,
   Link,
   Brain,
   Award,
-  Trophy,
-  Hexagon,
-  ChefHat,
-  Terminal
+  Trophy
 } from 'lucide-react';
 
 const skills = [
@@ -40,10 +36,30 @@ const achievements = [
 ];
 
 const codingProfiles = [
-  { name: 'LeetCode', icon: Terminal, url: '#', color: 'hsl(var(--primary))' },
-  { name: 'HackerRank', icon: Hexagon, url: '#', color: 'hsl(142 70% 45%)' },
-  { name: 'CodeChef', icon: ChefHat, url: '#', color: 'hsl(30 80% 50%)' },
-  { name: 'InterviewBit', icon: Code2, url: '#', color: 'hsl(200 80% 50%)' },
+  { 
+    name: 'LeetCode', 
+    url: 'https://leetcode.com/u/manideep_gudivada/', 
+    color: 'hsl(40 100% 50%)',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png'
+  },
+  { 
+    name: 'HackerRank', 
+    url: 'https://www.hackerrank.com/profile/gudivadamanideep', 
+    color: 'hsl(142 70% 45%)',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/65/HackerRank_logo.png'
+  },
+  { 
+    name: 'CodeChef', 
+    url: 'https://www.codechef.com/users/manideep_2412', 
+    color: 'hsl(30 80% 50%)',
+    logo: 'https://cdn.codechef.com/images/cc-logo.svg'
+  },
+  { 
+    name: 'InterviewBit', 
+    url: 'https://www.interviewbit.com/profile/manideep_surya/', 
+    color: 'hsl(200 80% 50%)',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Interviewbit_logo.png'
+  },
 ];
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
@@ -94,8 +110,6 @@ const AchievementCard = ({ achievement, index }: { achievement: typeof achieveme
 };
 
 const CodingProfileCard = ({ profile, index }: { profile: typeof codingProfiles[0]; index: number }) => {
-  const Icon = profile.icon;
-  
   return (
     <motion.a
       href={profile.url}
@@ -119,12 +133,11 @@ const CodingProfileCard = ({ profile, index }: { profile: typeof codingProfiles[
           transition: 'all 0.3s ease',
         }}
       >
-        <div 
-          className="w-16 h-16 flex items-center justify-center transition-all duration-300"
-          style={{ color: 'hsl(var(--foreground))' }}
-        >
-          <Icon className="w-12 h-12 group-hover:scale-110 transition-transform duration-300" 
-            style={{ color: 'inherit' }}
+        <div className="w-16 h-16 flex items-center justify-center transition-all duration-300">
+          <img 
+            src={profile.logo} 
+            alt={profile.name} 
+            className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300 brightness-0 invert opacity-80 group-hover:opacity-100"
           />
         </div>
         <span className="text-xl font-semibold text-foreground">{profile.name}</span>
