@@ -13,7 +13,7 @@ const milestones = [
   {
     year: '2022',
     title: 'Deep into DSA',
-    description: 'Mastered data structures and algorithms, solving 300+ problems',
+    description: 'Medium-level DSA problem solver, building strong algorithmic thinking',
     icon: Star,
     highlight: false,
   },
