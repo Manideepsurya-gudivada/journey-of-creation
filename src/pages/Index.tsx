@@ -2,6 +2,7 @@ import TerminalHero from '@/components/portfolio/TerminalHero';
 import TheBeginning from '@/components/portfolio/TheBeginning';
 import HowIThink from '@/components/portfolio/HowIThink';
 import ProjectShowcase from '@/components/portfolio/ProjectShowcase';
+import SkillsSection from '@/components/portfolio/SkillsSection';
 import GrowthTimeline from '@/components/portfolio/GrowthTimeline';
 import ContactSection from '@/components/portfolio/ContactSection';
 import CustomCursor from '@/components/portfolio/CustomCursor';
@@ -38,6 +39,7 @@ const Index = () => {
         <TheBeginning />
         <HowIThink />
         <ProjectShowcase />
+        <SkillsSection />
         <GrowthTimeline />
         <ContactSection />
       </main>
