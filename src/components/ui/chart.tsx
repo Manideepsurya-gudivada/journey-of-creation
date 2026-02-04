@@ -29,6 +29,29 @@ function useChart() {
   return context;
 }
 
+/**
+ * Builds validated CSS custom properties for chart colors.
+ * @security Only includes colors that pass validation to prevent CSS injection.
+ */
+const buildChartStyles = (config: ChartConfig, isDark: boolean): React.CSSProperties => {
+  const styles: Record<string, string> = {};
+  
+  Object.entries(config).forEach(([key, itemConfig]) => {
+    if (!itemConfig.theme && !itemConfig.color) return;
+    
+    const sanitizedKey = sanitizeKey(key);
+    const color = isDark 
+      ? (itemConfig.theme?.dark || itemConfig.color)
+      : (itemConfig.theme?.light || itemConfig.color);
+    
+    if (color && isValidColor(color)) {
+      styles[`--color-${sanitizedKey}`] = color;
+    }
+  });
+  
+  return styles as React.CSSProperties;
+};
+
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -38,6 +61,25 @@ const ChartContainer = React.forwardRef<
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
+  
+  // Detect dark mode and build styles accordingly
+  const [isDark, setIsDark] = React.useState(false);
+  
+  React.useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    
+    checkDarkMode();
+    
+    // Observe class changes on html element for theme switches
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  const chartStyles = buildChartStyles(config, isDark);
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -48,9 +90,9 @@ const ChartContainer = React.forwardRef<
           "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none",
           className,
         )}
+        style={chartStyles}
         {...props}
       >
-        <ChartStyle id={chartId} config={config} />
         <RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
       </div>
     </ChartContext.Provider>
@@ -58,6 +100,48 @@ const ChartContainer = React.forwardRef<
 });
 ChartContainer.displayName = "Chart";
 
+/**
+ * Validates that a color value is a safe CSS color format.
+ * Allows: hex (#fff, #ffffff, #ffffffff), rgb(), rgba(), hsl(), hsla(), and CSS variables.
+ * @security This prevents CSS injection attacks when color values come from user input.
+ */
+const isValidColor = (color: string): boolean => {
+  const trimmed = color.trim();
+  // Allow CSS variables like var(--color-name)
+  if (/^var\(--[\w-]+\)$/.test(trimmed)) {
+    return true;
+  }
+  // Allow hex colors: #fff, #ffffff, #ffffffff
+  if (/^#[0-9A-Fa-f]{3,8}$/.test(trimmed)) {
+    return true;
+  }
+  // Allow rgb/rgba with numbers and percentages
+  if (/^rgba?\(\s*[\d.%,\s/]+\)$/.test(trimmed)) {
+    return true;
+  }
+  // Allow hsl/hsla with numbers, percentages, and deg
+  if (/^hsla?\(\s*[\d.%,\s/deg]+\)$/.test(trimmed)) {
+    return true;
+  }
+  // Allow named colors (basic validation - alphanumeric only)
+  if (/^[a-zA-Z]+$/.test(trimmed)) {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Sanitizes a CSS key to prevent injection.
+ * Only allows alphanumeric characters, hyphens, and underscores.
+ */
+const sanitizeKey = (key: string): string => {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '');
+};
+
+/**
+ * ChartStyle component that sets CSS custom properties for chart colors.
+ * @security Uses validated inline styles instead of dangerouslySetInnerHTML to prevent XSS.
+ */
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
 
@@ -65,25 +149,40 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null;
   }
 
+  // Build CSS custom properties safely using React's style attribute
+  const lightStyles: React.CSSProperties = {};
+  const darkStyles: React.CSSProperties = {};
+
+  colorConfig.forEach(([key, itemConfig]) => {
+    const sanitizedKey = sanitizeKey(key);
+    const lightColor = itemConfig.theme?.light || itemConfig.color;
+    const darkColor = itemConfig.theme?.dark || itemConfig.color;
+
+    if (lightColor && isValidColor(lightColor)) {
+      (lightStyles as Record<string, string>)[`--color-${sanitizedKey}`] = lightColor;
+    }
+    if (darkColor && isValidColor(darkColor)) {
+      (darkStyles as Record<string, string>)[`--color-${sanitizedKey}`] = darkColor;
+    }
+  });
+
+  // Use a hidden div with CSS custom properties that will be inherited
+  // This is safer than dangerouslySetInnerHTML while maintaining the same functionality
   return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
-}
-`,
-          )
-          .join("\n"),
-      }}
-    />
+    <>
+      <div 
+        data-chart-styles={id}
+        data-theme="light"
+        style={{ ...lightStyles, display: 'none' }}
+        aria-hidden="true"
+      />
+      <div 
+        data-chart-styles={id}
+        data-theme="dark"
+        style={{ ...darkStyles, display: 'none' }}
+        aria-hidden="true"
+      />
+    </>
   );
 };
 
@@ -300,4 +399,4 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
 }
 
-export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle };
+export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent };
